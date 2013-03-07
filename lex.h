@@ -1,0 +1,8 @@
+#define ISDIGIT(c)  ((c>='0')&&(c<='9'))
+#define ISLETTER(c) (((c>='a')&&(c<='z'))||(c>='A'&(c<='Z')))
+#define ISOP(c)    (c=='+'||c=='-'||c=='*'||c=='/')
+#define ISEQ(c)     (c=='=')
+#define ISGT(c)     (c=='>')
+#define ISLT(c)     (c=='<')
+#define ISDQ(c)     (c=='\"')
+#define ISNE(c)     (c=='!')
