@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 using namespace std;
+#define KEYWORDNUM 5
+string reservedWords[]={"if","then","end","do","repeat"} ;
 enum StateType{
     STATE_START,
     STATE_NUM,
@@ -29,13 +31,26 @@ enum TokenType{
     TOKEN_GT,
     TOKEN_LT,
     TOKEN_STR,
-    TOKEN_OP
+    TOKEN_OP,
+    TOKEN_IF,
+    TOKEN_THEN,
+    TOKEN_END,
+    TOKEN_DO,
+    TOKEN_REPEAT
 };
 typedef struct Token{
     string data;
     TokenType type;
 }Token;
 vector<Token> vecToken;
+
+TokenType findKeyWord(string str){
+    for(int i=0;i<KEYWORDNUM;i++)
+        if(!strcmp(str.c_str(),reservedWords[i].c_str()))
+            return (TokenType)(TOKEN_IF+i);
+        return TOKEN_ID;
+}
+
 
 void getToken(string str,vector<Token> &vecToken){
     string str_tmp;
@@ -131,10 +146,10 @@ void getToken(string str,vector<Token> &vecToken){
                 break;
         }
         if(currState  == STATE_DONE){
+            if(tokenType==TOKEN_ID)
+                tokenType = findKeyWord(str_tmp);
             t.data = str_tmp;
-            cout << str_tmp << "\n";
             t.type = tokenType;
-            cout << tokenType << "\n";
             vecToken.push_back(t);
             pos = pos -1;
             currState = STATE_START;
@@ -143,7 +158,10 @@ void getToken(string str,vector<Token> &vecToken){
         else
             str_tmp += c;
     }
-
+    //处理未完成的currState;
+    //t.data = str_tmp;
+    //t.type = tokenType;
+    //vecToken.push_back(t);
 }
 
 
@@ -155,9 +173,9 @@ int main(){
         cout << str <<"\n";
         ++line;
         getToken(str,vecToken);
-//        vector <Token> ::iterator   iter=vecToken.begin();
-//        for(;iter!=vecToken.end();iter++)
-//            cout << iter->data  << iter ->type;
     }
+    vector <Token> ::iterator   iter=vecToken.begin();
+        for(;iter!=vecToken.end();iter++)
+            cout << iter->data  << iter ->type;
     return 0;
 }
